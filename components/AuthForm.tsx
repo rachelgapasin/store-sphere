@@ -13,12 +13,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { createAccount } from "@/lib/actions/user.actions";
+import { createAccount, signInUser } from "@/lib/actions/user.actions";
 import OTPModal from "@/components/OTPModal";
+import { Frown } from "lucide-react";
 
 type FormType = "sign-in" | "sign-up";
 
@@ -35,6 +38,10 @@ const authFormSchema = (formType: FormType) => {
 const AuthForm = ({ type }: { type: FormType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [alert, setAlert] = useState<{
+    title: string;
+    description: string;
+  } | null>(null);
   const [accountId, setAccountId] = useState(null);
 
   const formSchema = authFormSchema(type);
@@ -50,12 +57,25 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     setErrorMessage("");
+    setAlert(null);
 
     try {
-      const user = await createAccount({
-        fullName: values.fullName || "",
-        email: values.email,
-      });
+      const user =
+        type === "sign-up"
+          ? await createAccount({
+              fullName: values.fullName || "",
+              email: values.email,
+            })
+          : await signInUser({ email: values.email });
+
+      if (type === "sign-in" && !user.accountId) {
+        setAlert({
+          title: "Oh no!",
+          description:
+            "We couldn't find an existing account with this email. Please, try creating an account instead.",
+        });
+        return;
+      }
 
       setAccountId(user.accountId);
     } catch {
@@ -72,6 +92,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
           <h1 className="form-title">
             {type === "sign-in" ? "Sign In" : "Sign Up"}
           </h1>
+
+          {alert && (
+            <Alert className="rounded-xl bg-brand text-white">
+              <Frown color="white" className="size-4" />
+              <AlertTitle>{alert.title}</AlertTitle>
+              <AlertDescription>{alert.description}</AlertDescription>
+            </Alert>
+          )}
+
           {type === "sign-up" && (
             <FormField
               control={form.control}

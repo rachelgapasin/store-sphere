@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +16,6 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import React, { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { sendEmailOTP, verifySecret } from "@/lib/actions/user.actions";
@@ -71,7 +71,7 @@ const OTPModal = ({
           </AlertDialogTitle>
           <AlertDialogDescription className="subtitle-2 text-center text-light-100">
             We&apos;ve sent a code to{" "}
-            <span className="pl-1 text-brand">{email}</span>
+            <span className="text-brand">{email}</span>
           </AlertDialogDescription>
         </AlertDialogHeader>
 
