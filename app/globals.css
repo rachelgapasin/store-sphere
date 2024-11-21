@@ -279,7 +279,7 @@
   }
 
   .modal-submit-button {
-    @apply primary-btn !mx-0 h-[52px] w-full flex-1 !important;
+    @apply primary-btn mx-0 h-[52px] w-full flex-1 !important;
   }
 
   /* ActionsModalContent */
@@ -296,7 +296,7 @@
   }
 
   .share-wrapper {
-    @apply !mt-2 space-y-2 !important;
+    @apply mt-2 space-y-2 !important;
   }
 
   .share-input-field {
