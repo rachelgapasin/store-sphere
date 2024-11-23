@@ -3,7 +3,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -26,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { renameFile } from "@/lib/actions/file.actions";
 import { usePathname } from "next/navigation";
+import { FileDetails } from "@/components/ActionsModalContent";
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const path = usePathname();
@@ -83,6 +83,8 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
               className="rename-input-field"
             />
           )}
+
+          {value === "details" && <FileDetails file={file} />}
         </DialogHeader>
 
         {["rename", "delete", "share"].includes(value) && (
